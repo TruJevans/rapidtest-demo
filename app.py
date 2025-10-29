@@ -197,10 +197,5 @@ if submitted:
             file_name="RapidTest_Forecast_Deck.zip",
             mime="application/zip"
         )
-
 else:
     st.info("Adjust parameters and click **Run Forecast** to generate projections.")
-
-    
-        
-         
