@@ -1,4 +1,5 @@
-# app.py — RapidTest.ai Demo (final working + About section)
+# app.py — RapidTest.ai Demo (fully working + About section)
+
 import streamlit as st
 import numpy as np, pandas as pd, matplotlib.pyplot as plt
 from io import BytesIO
@@ -199,3 +200,7 @@ if submitted:
 
 else:
     st.info("Adjust parameters and click **Run Forecast** to generate projections.")
+
+    
+        
+         
