@@ -1,4 +1,4 @@
-# app.py — RapidTest.ai Demo (final version, working + About section)
+# app.py — RapidTest.ai Demo (final working + About section)
 import streamlit as st
 import numpy as np, pandas as pd, matplotlib.pyplot as plt
 from io import BytesIO
@@ -129,3 +129,73 @@ if submitted:
         ax1.plot(det["Month"], mean, label="Stochastic Mean", ls="--", color="#1f3b70")
         ax1.fill_between(det["Month"], low, high, color="#9cbcf2", alpha=0.3)
         ax1.set_title("Monthly Recurring Revenue", color="#1f3b70")
+        ax1.set_xlabel("Month"); ax1.set_ylabel("MRR ($)")
+        ax1.legend(); ax1.grid(alpha=.3)
+
+        fig2, ax2 = plt.subplots(figsize=(6,4))
+        ax2.plot(det["Month"], det["Cumulative"], label="Deterministic", color="#1f3b70", lw=2)
+        ax2.plot(det["Month"], cum_mean, label="Stochastic Cumulative", ls="--", color="#4c8dd9")
+        ax2.set_title("Cumulative Revenue", color="#1f3b70")
+        ax2.set_xlabel("Month"); ax2.set_ylabel("Revenue ($)")
+        ax2.legend(); ax2.grid(alpha=.3)
+
+        colA, colB = st.columns(2)
+        colA.pyplot(fig1, use_container_width=True)
+        colB.pyplot(fig2, use_container_width=True)
+
+    # ---------- AI SUMMARY ----------
+    uplift = (cum_mean[-1]-det["Cumulative"].iloc[-1]) / det["Cumulative"].iloc[-1] * 100 if det["Cumulative"].iloc[-1] > 0 else 0
+    insight = f"RapidTest.ai outperformed baseline projections by {uplift:,.1f}% through iterative engagement optimization."
+    st.markdown(f"#### Insight\n{insight}")
+
+    # ---------- PDF + ZIP GENERATION ----------
+    with st.spinner("Generating Investor Deck..."):
+        start, end = det["MRR"].iloc[0], det["MRR"].iloc[-1]
+        arr_est = end * 12
+
+        def make_pdf(path, title, desc, metrics):
+            c = canvas.Canvas(path, pagesize=letter)
+            w, h = letter
+            c.setFillColorRGB(0.12, 0.23, 0.44)
+            c.rect(0, h-80, w, 80, fill=True, stroke=False)
+            c.setFillColor(colors.white)
+            c.setFont("Helvetica-Bold", 22)
+            c.drawString(50, h-55, title)
+            c.setFont("Helvetica", 12)
+            c.drawString(50, h-90, desc)
+            c.setFillColor(colors.black)
+            y = h - 120
+            c.setFont("Helvetica", 11)
+            for m in metrics:
+                c.drawString(60, y, m)
+                y -= 15
+            c.save()
+
+        make_pdf("investor_brief.pdf", "RapidTest.ai Forecast Summary",
+                 "Forecast Summary — Hybrid SaaS Video Optimization",
+                 [f"Starting MRR: ${start:,.0f}",
+                  f"12-Month Projected MRR: ${end:,.0f}",
+                  f"Annual Run-Rate: ${arr_est:,.0f}",
+                  f"Stochastic Uplift: +{uplift:,.1f}%"])
+
+        make_pdf("partner_sales_sheet.pdf", "Scale Your SaaS Clients with RapidTest.ai",
+                 "We produce and test multiple video variants weekly using data-driven iteration.",
+                 [f"Growth Rate: {growth:.1f}%",
+                  f"Churn: {churn:.1f}%",
+                  f"12-Month ARR: ${arr_est:,.0f}",
+                  f"Engagement Uplift: +{uplift:,.1f}%"])
+
+        buffer = BytesIO()
+        with ZipFile(buffer, "w") as z:
+            z.write("investor_brief.pdf")
+            z.write("partner_sales_sheet.pdf")
+
+        st.download_button(
+            label="📁 Download Investor Deck (ZIP)",
+            data=buffer.getvalue(),
+            file_name="RapidTest_Forecast_Deck.zip",
+            mime="application/zip"
+        )
+
+else:
+    st.info("Adjust parameters and click **Run Forecast** to generate projections.")
