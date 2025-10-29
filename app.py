@@ -1,4 +1,4 @@
-# app.py — RapidTest.ai Demo (fully working + About section)
+# app.py — RapidTest.ai Demo (mobile-optimized, clean rebuild)
 
 import streamlit as st
 import numpy as np, pandas as pd, matplotlib.pyplot as plt
@@ -13,26 +13,51 @@ st.set_page_config(page_title="RapidTest.ai Demo", layout="wide", page_icon="�
 
 st.markdown("""
 <style>
-/* --- Page base colors --- */
-.stApp, .block-container {
+/* ---- Base ---- */
+html, body, [class*="stApp"] {
     background-color: #ffffff !important;
     color: #1f3b70 !important;
+    font-family: "Inter", "Helvetica", sans-serif;
+    overflow-x: hidden;
 }
 
-/* --- Form labels --- */
+/* ---- Mobile responsiveness ---- */
+@media (max-width: 768px) {
+    .block-container {
+        padding: 1rem 0.8rem !important;
+    }
+    h1, h2, h3 {
+        text-align: center !important;
+        font-size: 1.2rem !important;
+    }
+    .stSlider, .stNumberInput, .stSelectbox {
+        margin-bottom: 1rem !important;
+    }
+}
+
+/* ---- Header ---- */
+[data-testid="stHeader"] {
+    background-color: #1f3b70 !important;
+    color: white !important;
+    padding: 0.3rem 0 !important;
+    text-align: center;
+}
+h1, h2, h3, h4, h5 {
+    color: #1f3b70;
+}
+
+/* ---- Form labels ---- */
 [data-testid="stForm"] label,
 [data-testid="stForm"] [data-testid="stSliderLabel"],
 [data-testid="stForm"] [data-testid="stNumberInputLabel"],
-[data-testid="stForm"] [data-testid="stSelectboxLabel"],
-[data-testid="stForm"] div.row-widget.stRadio label {
+[data-testid="stForm"] [data-testid="stSelectboxLabel"] {
     color: #1f3b70 !important;
     font-weight: 600 !important;
     font-size: 0.95rem !important;
 }
 
-/* --- Sliders --- */
-[data-baseweb="slider"] div[role="slider"],
-[data-baseweb="slider"] div[role="slider"]::before {
+/* ---- Sliders ---- */
+[data-baseweb="slider"] div[role="slider"] {
     background-color: #1f3b70 !important;
 }
 [data-baseweb="slider"] span[data-testid="stThumbValue"] {
@@ -41,12 +66,7 @@ st.markdown("""
     border-radius: 4px !important;
 }
 
-/* --- Widget spacing --- */
-.stSlider, .stNumberInput, .stSelectbox {
-    margin-bottom: 1.4rem !important;
-}
-
-/* --- About section --- */
+/* ---- About section ---- */
 .about-box {
     background-color: #f4f7fb;
     border-radius: 12px;
@@ -67,9 +87,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------- HEADER ----------
-st.markdown("## Hybrid SaaS Forecast Simulator")
+st.markdown("<h2 style='text-align:center;'>📊 Hybrid SaaS Forecast Simulator</h2>", unsafe_allow_html=True)
 
-# ---------- ABOUT SECTION ----------
+# ---------- ABOUT ----------
 st.markdown("""
 <div class="about-box">
 <h2>💡 About RapidTest.ai</h2>
@@ -144,12 +164,12 @@ if submitted:
         colA.pyplot(fig1, use_container_width=True)
         colB.pyplot(fig2, use_container_width=True)
 
-    # ---------- AI SUMMARY ----------
+    # ---------- SUMMARY ----------
     uplift = (cum_mean[-1]-det["Cumulative"].iloc[-1]) / det["Cumulative"].iloc[-1] * 100 if det["Cumulative"].iloc[-1] > 0 else 0
     insight = f"RapidTest.ai outperformed baseline projections by {uplift:,.1f}% through iterative engagement optimization."
     st.markdown(f"#### Insight\n{insight}")
 
-    # ---------- PDF + ZIP GENERATION ----------
+    # ---------- PDF + ZIP ----------
     with st.spinner("Generating Investor Deck..."):
         start, end = det["MRR"].iloc[0], det["MRR"].iloc[-1]
         arr_est = end * 12
@@ -197,5 +217,6 @@ if submitted:
             file_name="RapidTest_Forecast_Deck.zip",
             mime="application/zip"
         )
+
 else:
     st.info("Adjust parameters and click **Run Forecast** to generate projections.")
