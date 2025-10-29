@@ -11,35 +11,27 @@ from reportlab.lib import colors
 # ---------- PAGE CONFIG ----------
 st.markdown("""
 <style>
-/* --- Keep header visible --- */
-[data-testid="stHeader"] {
-    background-color: #1f3b70 !important;
-    color: white !important;
-}
-[data-testid="stHeader"] h1, [data-testid="stHeader"] div {
-    color: white !important;
-}
+/* --- Keep Streamlit header untouched --- */
 
-/* --- Page background + text --- */
+/* --- Page base colors --- */
 .stApp, .block-container {
     background-color: #ffffff !important;
     color: #1f3b70 !important;
 }
 
-/* --- Explicit label fix for all widgets --- */
-[data-testid="stSliderLabel"],
-[data-testid="stNumberInputLabel"],
-[data-testid="stSelectboxLabel"],
-div.row-widget.stRadio label {
+/* --- Fix invisible labels (target only inside the main form area) --- */
+[data-testid="stForm"] label,
+[data-testid="stForm"] [data-testid="stSliderLabel"],
+[data-testid="stForm"] [data-testid="stNumberInputLabel"],
+[data-testid="stForm"] [data-testid="stSelectboxLabel"],
+[data-testid="stForm"] div.row-widget.stRadio label {
     color: #1f3b70 !important;
     font-weight: 600 !important;
     font-size: 0.95rem !important;
 }
 
-/* --- Slider thumb + value --- */
-[data-baseweb="slider"] div[role="slider"] {
-    background-color: #1f3b70 !important;
-}
+/* --- Slider thumbs and numbers --- */
+[data-baseweb="slider"] div[role="slider"],
 [data-baseweb="slider"] div[role="slider"]::before {
     background-color: #1f3b70 !important;
 }
@@ -49,7 +41,7 @@ div.row-widget.stRadio label {
     border-radius: 4px !important;
 }
 
-/* --- Widget spacing --- */
+/* --- Spacing between widgets --- */
 .stSlider, .stNumberInput, .stSelectbox {
     margin-bottom: 1.4rem !important;
 }
