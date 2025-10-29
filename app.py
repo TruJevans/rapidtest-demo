@@ -9,48 +9,52 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 
 # ---------- PAGE CONFIG ----------
-st.set_page_config(page_title="RapidTest.ai Demo", layout="wide", page_icon="📈")
-
-# ---------- THEME & STYLING ----------
 st.markdown("""
 <style>
-/* Header bar */
+/* --- Keep header visible --- */
 [data-testid="stHeader"] {
     background-color: #1f3b70 !important;
+    color: white !important;
+}
+[data-testid="stHeader"] h1, [data-testid="stHeader"] div {
+    color: white !important;
 }
 
-/* Page base */
+/* --- Page background + text --- */
 .stApp, .block-container {
     background-color: #ffffff !important;
     color: #1f3b70 !important;
 }
 
-/* Explicit label targeting for Streamlit 1.40+ DOM */
-[data-testid="stSliderLabel"], 
-[data-testid="stNumberInputLabel"], 
+/* --- Explicit label fix for all widgets --- */
+[data-testid="stSliderLabel"],
+[data-testid="stNumberInputLabel"],
 [data-testid="stSelectboxLabel"],
-div.row-widget.stRadio label, 
-label {
+div.row-widget.stRadio label {
     color: #1f3b70 !important;
     font-weight: 600 !important;
     font-size: 0.95rem !important;
 }
 
-/* Slider thumb + track styling */
+/* --- Slider thumb + value --- */
 [data-baseweb="slider"] div[role="slider"] {
     background-color: #1f3b70 !important;
 }
 [data-baseweb="slider"] div[role="slider"]::before {
     background-color: #1f3b70 !important;
 }
+[data-baseweb="slider"] span[data-testid="stThumbValue"] {
+    background-color: #1f3b70 !important;
+    color: white !important;
+    border-radius: 4px !important;
+}
 
-/* Spacing for mobile */
+/* --- Widget spacing --- */
 .stSlider, .stNumberInput, .stSelectbox {
     margin-bottom: 1.4rem !important;
 }
 </style>
 """, unsafe_allow_html=True)
-
 # ---------- USER INPUT ----------
 with st.form("forecast_form"):
     col1, col2, col3 = st.columns(3)
