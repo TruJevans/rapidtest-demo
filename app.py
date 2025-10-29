@@ -14,24 +14,42 @@ st.set_page_config(page_title="RapidTest.ai Demo", layout="wide", page_icon="ðŸ“
 # ---------- THEME & STYLING ----------
 st.markdown("""
 <style>
-[data-testid="stHeader"] {background-color: #1f3b70 !important;}
-.css-1d391kg, .stApp {background-color: #ffffff !important; color: #1f3b70 !important;}
-label, .stSlider > div[data-testid="stMarkdownContainer"] p,
-.stNumberInput label, .stSelectbox label {
+/* Header bar */
+[data-testid="stHeader"] {
+    background-color: #1f3b70 !important;
+}
+
+/* Page base */
+.stApp, .block-container {
+    background-color: #ffffff !important;
+    color: #1f3b70 !important;
+}
+
+/* Explicit label targeting for Streamlit 1.40+ DOM */
+[data-testid="stSliderLabel"], 
+[data-testid="stNumberInputLabel"], 
+[data-testid="stSelectboxLabel"],
+div.row-widget.stRadio label, 
+label {
     color: #1f3b70 !important;
     font-weight: 600 !important;
     font-size: 0.95rem !important;
 }
-.stSlider > div[data-baseweb="slider"] span[data-testid="stThumbValue"] {
+
+/* Slider thumb + track styling */
+[data-baseweb="slider"] div[role="slider"] {
     background-color: #1f3b70 !important;
-    color: #fff !important;
 }
-.stSlider, .stNumberInput, .stSelectbox {margin-bottom: 1.2rem !important;}
+[data-baseweb="slider"] div[role="slider"]::before {
+    background-color: #1f3b70 !important;
+}
+
+/* Spacing for mobile */
+.stSlider, .stNumberInput, .stSelectbox {
+    margin-bottom: 1.4rem !important;
+}
 </style>
 """, unsafe_allow_html=True)
-
-st.markdown("<h1 style='color:white;text-align:center;background-color:#1f3b70;padding:0.5em;'>RapidTest.ai</h1>", unsafe_allow_html=True)
-st.markdown("### Hybrid SaaS Forecast Simulator")
 
 # ---------- USER INPUT ----------
 with st.form("forecast_form"):
